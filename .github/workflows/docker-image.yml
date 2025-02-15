@@ -17,7 +17,7 @@ jobs:
       uses: docker/setup-buildx-action@v2
 
     - name: Cache Docker layers
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: /tmp/.buildx-cache
         key: ${{ runner.os }}-buildx-${{ github.sha }}
@@ -45,3 +45,11 @@ jobs:
     - name: Push the latest tag to Docker Hub
       run: |
         docker push ${{ secrets.DOCKER_USERNAME }}/TDS_project1:latest
+
+
+        - name: Debug Docker build
+  run: |
+    docker --version
+    docker info
+    docker build -t your-dockerhub-username/TDS_project1:${{ github.sha }} .
+
