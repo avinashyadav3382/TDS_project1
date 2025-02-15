@@ -2,9 +2,9 @@ name: Test FastAPI Endpoints
 
 on:
   workflow_run:
-    workflows: ["Build and Deploy"]  # Trigger this workflow after the build and deploy workflow finishes
+    workflows: ["docker-image"]  # Name of your docker-image.yml workflow
     types:
-      - completed
+      - completed  # Trigger this workflow after the docker-image.yml finishes
 
 jobs:
   test_api:
