@@ -26,8 +26,8 @@ jobs:
     
     - name: Build Docker image
       run: |
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/TDS_project1:${{ github.sha }} .
-    
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/tdsproject1:${{ github.sha }} .
+
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
       with:
@@ -36,24 +36,21 @@ jobs:
     
     - name: Push Docker image to Docker Hub
       run: |
-        docker push ${{ secrets.DOCKER_USERNAME }}/TDS_project1:${{ github.sha }}
+        docker push ${{ secrets.DOCKER_USERNAME }}/tdsproject1:${{ github.sha }}
 
     - name: Tag the latest image
       run: |
-        docker tag ${{ secrets.DOCKER_USERNAME }}/TDS_project1:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/TDS_project1:latest
+        docker tag ${{ secrets.DOCKER_USERNAME }}/tdsproject1:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/tdsproject1:latest
     
     - name: Push the latest tag to Docker Hub
       run: |
-        docker push ${{ secrets.DOCKER_USERNAME }}/TDS_project1:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/tdsproject1:latest
 
-
-        - name: Debug Docker build
-  run: |
-    docker --version
-    docker info
-    docker build -t your-dockerhub-username/TDS_project1:${{ github.sha }} .
-
+    - name: Debug Docker build
+      run: |
+        docker --version
+        docker info
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/tdsproject1:${{ github.sha }} .
 
     - name: List Docker images
-  run: docker images
-
+      run: docker images
