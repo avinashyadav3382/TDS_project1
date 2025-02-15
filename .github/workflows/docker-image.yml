@@ -53,3 +53,7 @@ jobs:
     docker info
     docker build -t your-dockerhub-username/TDS_project1:${{ github.sha }} .
 
+
+    - name: List Docker images
+  run: docker images
+
