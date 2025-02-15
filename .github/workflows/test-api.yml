@@ -1,0 +1,46 @@
+name: Test FastAPI Endpoints
+
+on:
+  workflow_run:
+    workflows: ["Build and Deploy"]  # Trigger this workflow after the build and deploy workflow finishes
+    types:
+      - completed
+
+jobs:
+  test_api:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Podman
+      run: |
+        sudo apt update
+        sudo apt install -y podman  # Install Podman on Ubuntu
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}  # Docker Hub username
+        password: ${{ secrets.DOCKER_PASSWORD }}  # Docker Hub password
+
+    - name: Pull Docker image from Docker Hub
+      run: |
+        podman pull johndoe/tdsproject1  # Replace with your image name
+
+    - name: Run Podman container
+      run: |
+        podman run -e AIPROXY_TOKEN=${{ secrets.AIPROXY_TOKEN }} -p 8000:8000 johndoe/tdsproject1  # Start the container
+
+    - name: Wait for the container to start
+      run: |
+        sleep 10  # Wait for 10 seconds to give the container time to start
+
+    - name: Test the FastAPI /run endpoint
+      run: |
+        curl "http://localhost:8000/run?task=test-task" || exit 1  # Exit 1 if the curl command fails
+
+    - name: Test the FastAPI /read endpoint
+      run: |
+        curl "http://localhost:8000/read?path=/path/to/file" || exit 1  # Exit 1 if the curl command fails
